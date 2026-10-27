@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#07162d">
+
+    <title>WeatherHub | Explore Weather Worldwide</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+<div class="app-shell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+        <a class="brand" href="#home">
+            <span class="brand-weather">🌤️</span>
+
+            <span>
+                <strong>Weather<span>Hub</span></strong>
+                <small>Explore Weather Worldwide</small>
+            </span>
+        </a>
+
+        <nav class="side-nav">
+            <a class="nav-link active" href="#home" data-section="home">
+                <i data-lucide="house"></i>
+                <span>Home</span>
+            </a>
+
+            <a class="nav-link" href="#current-weather" data-section="current-weather">
+                <i data-lucide="cloud-sun"></i>
+                <span>Current Weather</span>
+            </a>
+
+            <a class="nav-link" href="#forecast" data-section="forecast">
+                <i data-lucide="calendar-days"></i>
+                <span>5-Day Forecast</span>
+            </a>
+
+            <a class="nav-link" href="#favourites" data-section="favourites">
+                <i data-lucide="heart"></i>
+                <span>Favourite Cities</span>
+            </a>
+
+            <a class="nav-link" href="#about" data-section="about">
+                <i data-lucide="info"></i>
+                <span>About</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-art">
+            <div class="art-cloud">☁️</div>
+            <div class="art-globe">🌎</div>
+
+            <p>“Better Weather<br>Better Days”</p>
+        </div>
+
+        <div class="sidebar-footer">
+            WeatherHub <span>•</span> Your weather companion
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-area" id="home">
+
+        <!-- TOP SEARCH BAR -->
+        <header class="topbar">
+
+            <button
+                class="icon-button menu-toggle"
+                id="menu-toggle"
+                aria-label="Toggle navigation"
+                type="button"
+            >
+                <i data-lucide="menu"></i>
+            </button>
+
+            <form class="search-form" id="search-form">
+
+                <label class="location-input">
+                    <i data-lucide="map-pin"></i>
+
+                    <input
+                        id="city"
+                        name="city"
+                        value="Vijayawada"
+                        placeholder="Search city..."
+                        autocomplete="off"
+                        required
+                    >
+                </label>
+
+                <label class="country-input">
+                    <span class="sr-only">Country code</span>
+
+                    <input
+                        id="country"
+                        name="country"
+                        value="IN"
+                        maxlength="2"
+                        aria-label="Country code"
+                        placeholder="IN"
+                    >
+                </label>
+
+                <button class="primary-button search-button" type="submit">
+                    <i data-lucide="search"></i>
+                    <span>Search</span>
+                </button>
+
+            </form>
+
+            <div class="topbar-right">
+
+                <div class="theme-toggle">
+                    <button
+                        id="light-theme"
+                        class="theme-option active"
+                        type="button"
+                        title="Light theme"
+                    >
+                        <i data-lucide="sun"></i>
+                    </button>
+
+                    <button
+                        id="dark-theme"
+                        class="theme-option"
+                        type="button"
+                        title="Dark theme"
+                    >
+                        <i data-lucide="moon"></i>
+                    </button>
+                </div>
+
+                <div class="date-display">
+                    <strong id="today-date">Loading date...</strong>
+                    <span id="today-time">--:--</span>
+                </div>
+
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+
+            <!-- LEFT COLUMN -->
+            <section class="center-column">
+
+                <div
+                    id="message"
+                    class="message"
+                    role="status"
+                    aria-live="polite"
+                    hidden
+                ></div>
+
+                <!-- CURRENT WEATHER HERO -->
+                <section class="hero-card" id="current-weather">
+
+                    <div class="hero-overlay"></div>
+
+                    <div class="hero-content">
+
+                        <div class="live-pill">
+                            <span></span>
+                            Live Weather
+                        </div>
+
+                        <div class="hero-location">
+                            <h1 id="current-city">Vijayawada, IN</h1>
+
+                            <p class="location-subtitle">
+                                <i data-lucide="map-pin"></i>
+                                <span id="current-location">
+                                    Andhra Pradesh, India
+                                </span>
+                            </p>
+                        </div>
+
+                        <p class="hero-date" id="observed-date">
+                            Current local weather
+                        </p>
+
+                        <div class="hero-temperature">
+                            <span id="current-temperature">--</span>
+                            <sup>°C</sup>
+                        </div>
+
+                        <p class="hero-description" id="current-description">
+                            Loading weather...
+                        </p>
+
+                        <p class="feels-like">
+                            <img
+                                id="current-icon"
+                                src="https://openweathermap.org/img/wn/02d@2x.png"
+                                alt="Weather icon"
+                            >
+
+                            <span>
+                                Feels like
+                                <strong id="feels-like">--°C</strong>
+                            </span>
+                        </p>
+
+                    </div>
+                </section>
+
+                <!-- WEATHER METRICS -->
+                <section class="stats-grid">
+
+                    <article class="stat-card stat-feels">
+                        <div class="stat-icon">
+                            <i data-lucide="thermometer"></i>
+                        </div>
+                        <span>Feels Like</span>
+                        <strong id="stat-feels">--°C</strong>
+                    </article>
+
+                    <article class="stat-card stat-humidity">
+                        <div class="stat-icon">
+                            <i data-lucide="droplet"></i>
+                        </div>
+                        <span>Humidity</span>
+                        <strong id="stat-humidity">--%</strong>
+                    </article>
+
+                    <article class="stat-card stat-wind">
+                        <div class="stat-icon">
+                            <i data-lucide="wind"></i>
+                        </div>
+                        <span>Wind Speed</span>
+                        <strong id="stat-wind">-- m/s</strong>
+                    </article>
+
+                    <article class="stat-card stat-pressure">
+                        <div class="stat-icon">
+                            <i data-lucide="gauge"></i>
+                        </div>
+                        <span>Pressure</span>
+                        <strong id="stat-pressure">-- hPa</strong>
+                    </article>
+
+                    <article class="stat-card stat-visibility">
+                        <div class="stat-icon">
+                            <i data-lucide="eye"></i>
+                        </div>
+                        <span>Visibility</span>
+                        <strong id="stat-visibility">-- km</strong>
+                    </article>
+
+                </section>
+
+                <!-- FORECAST -->
+                <section class="panel forecast-panel" id="forecast">
+
+                    <div class="panel-heading">
+                        <div class="heading-title">
+                            <i data-lucide="calendar-days"></i>
+                            <h2>5-Day Weather Forecast</h2>
+                        </div>
+
+                        <span class="subtle-label">Next 5 days</span>
+                    </div>
+
+                    <div class="forecast-grid" id="forecast-list">
+                        <div class="skeleton">Loading forecast...</div>
+                    </div>
+
+                </section>
+
+            </section>
+
+            <!-- RIGHT COLUMN -->
+            <aside class="right-column">
+
+                <!-- FAVOURITE CITIES -->
+                <section class="panel favourites-panel" id="favourites">
+
+                    <div class="panel-heading">
+
+                        <div class="heading-title">
+                            <i class="heading-heart" data-lucide="heart"></i>
+                            <h2>Favourite Cities</h2>
+                        </div>
+
+                        <button
+                            class="primary-button add-city-button"
+                            id="add-city-button"
+                            type="button"
+                        >
+                            <i data-lucide="plus"></i>
+                            <span>Add City</span>
+                        </button>
+
+                    </div>
+
+                    <div id="favorites-list" class="favorites-list">
+                        <div class="skeleton">Loading favourite cities...</div>
+                    </div>
+
+                    <button
+                        class="view-all-button"
+                        id="view-all-favorites"
+                        type="button"
+                    >
+                        View All Favourite Cities
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+
+                </section>
+
+                <!-- WORLD WEATHER -->
+                <section class="panel world-panel" id="world-weather">
+
+                    <div class="panel-heading">
+
+                        <div class="heading-title">
+                            <i class="world-icon" data-lucide="globe"></i>
+                            <h2>Weather around the World</h2>
+                        </div>
+
+                        <span class="map-label">World cities</span>
+
+                    </div>
+
+                    <div class="world-list" id="world-list">
+
+                        <article class="world-city">
+                            <div class="city-thumb thumb-new-york">🗽</div>
+                            <div class="world-city-name">
+                                <strong>New York, US</strong>
+                                <span>Clear Sky</span>
+                            </div>
+                            <span class="world-weather-icon">☀️</span>
+                            <div class="world-temp">
+                                <strong>12.4°C</strong>
+                                <span>Clear Sky</span>
+                            </div>
+                            <i data-lucide="chevron-right"></i>
+                        </article>
+
+                        <article class="world-city">
+                            <div class="city-thumb thumb-london">🇬🇧</div>
+                            <div class="world-city-name">
+                                <strong>London, GB</strong>
+                                <span>Cloudy</span>
+                            </div>
+                            <span class="world-weather-icon">☁️</span>
+                            <div class="world-temp">
+                                <strong>10.1°C</strong>
+                                <span>Cloudy</span>
+                            </div>
+                            <i data-lucide="chevron-right"></i>
+                        </article>
+
+                        <article class="world-city">
+                            <div class="city-thumb thumb-tokyo">⛩️</div>
+                            <div class="world-city-name">
+                                <strong>Tokyo, JP</strong>
+                                <span>Partly Cloudy</span>
+                            </div>
+                            <span class="world-weather-icon">🌤️</span>
+                            <div class="world-temp">
+                                <strong>18.7°C</strong>
+                                <span>Partly Cloudy</span>
+                            </div>
+                            <i data-lucide="chevron-right"></i>
+                        </article>
+
+                        <article class="world-city">
+                            <div class="city-thumb thumb-sydney">🌉</div>
+                            <div class="world-city-name">
+                                <strong>Sydney, AU</strong>
+                                <span>Sunny</span>
+                            </div>
+                            <span class="world-weather-icon">☀️</span>
+                            <div class="world-temp">
+                                <strong>21.3°C</strong>
+                                <span>Sunny</span>
+                            </div>
+                            <i data-lucide="chevron-right"></i>
+                        </article>
+
+                    </div>
+                </section>
+
+                <!-- ABOUT -->
+                <section class="panel about-panel" id="about">
+                    <div class="heading-title">
+                        <i data-lucide="cloud-sun"></i>
+                        <h2>About WeatherHub</h2>
+                    </div>
+
+                    <p>
+                        Your weather companion for current conditions,
+                        upcoming forecasts, and saved cities around the world.
+                    </p>
+                </section>
+
+            </aside>
+        </div>
+
+        <footer class="page-footer">
+            Weather data powered by OpenWeather · Built for curious skies
+        </footer>
+
+    </main>
+</div>
+
+<!-- ADD FAVOURITE CITY DIALOG -->
+<dialog id="add-city-dialog" class="city-dialog">
+
+    <form id="add-city-form">
+
+        <div class="dialog-heading">
+            <h2>Add a favourite city</h2>
+
+            <button
+                class="icon-button"
+                type="button"
+                id="close-dialog"
+                aria-label="Close"
+            >
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+
+        <label for="favorite-city">City name</label>
+        <input id="favorite-city" required placeholder="e.g. Hyderabad">
+
+        <label for="favorite-country">Country code (optional)</label>
+        <input id="favorite-country" maxlength="2" placeholder="IN">
+
+        <label for="favorite-note">Note (optional)</label>
+        <input id="favorite-note" maxlength="255" placeholder="e.g. Home town">
+
+        <div class="dialog-actions">
+            <button type="button" class="secondary-button" id="cancel-dialog">
+                Cancel
+            </button>
+
+            <button type="submit" class="primary-button">
+                Add City
+            </button>
+        </div>
+
+    </form>
+</dialog>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
