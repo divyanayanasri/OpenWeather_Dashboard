@@ -107,10 +107,97 @@ Open the local URL printed by Flask in your browser. The default is often `http:
 
 ## API Endpoints
 
-The application separates weather and favourite-city operations into individual route modules.
+WeatherHub exposes REST API endpoints through Flask Blueprints. Weather data is retrieved from the OpenWeather service using the selected city's coordinates.
 
-The exact HTTP methods, URL paths, request parameters, and response formats should be documented here after verifying the route definitions in the source code.
+### 1. Get Current Weather
 
+**Endpoint:** `GET /api/weather/current`
+
+Retrieves current weather conditions for a specified location.
+
+**Query parameters**
+
+| Parameter | Required | Description |
+|---|---|---|
+| `city` | Verify in `get_location_from_request()` | City name |
+| `country` | Verify in `get_location_from_request()` | Country code or name, if supported |
+
+**Successful response:** `200 OK`
+
+```json
+{
+  "status": "success",
+  "data": {
+    "city": "London",
+    "country": "GB",
+    "latitude": 51.5072,
+    "longitude": -0.1276,
+    "temperature_c": 18.5,
+    "feels_like_c": 18.0,
+    "minimum_temperature_c": 16.0,
+    "maximum_temperature_c": 20.0,
+    "humidity_percent": 70,
+    "pressure_hpa": 1012,
+    "wind_speed_mps": 3.5,
+    "visibility_m": 10000,
+    "description": "scattered clouds",
+    "icon": "03d",
+    "sunrise": 1790000000,
+    "sunset": 1790040000,
+    "observed_at": 1790020000
+  }
+}
+```
+
+*The values above are illustrative examples of the response structure, not live weather data. Optional fields may be `null`.*
+
+### 2. Get Weather Forecast
+
+**Endpoint:** `GET /api/weather/forecast`
+
+Retrieves forecast information for the selected location, including temperature, humidity, weather conditions, wind speed, and precipitation probability.
+
+**Successful response:** `200 OK`
+
+```json
+{
+  "status": "success",
+  "data": {
+    "city": "London",
+    "country": "GB",
+    "timezone_offset_seconds": 0,
+    "forecast_count": 1,
+    "forecast": [
+      {
+        "forecast_time_utc": "2026-10-28 12:00:00",
+        "temperature_c": 18.5,
+        "feels_like_c": 18.0,
+        "humidity_percent": 70,
+        "description": "scattered clouds",
+        "icon": "03d",
+        "wind_speed_mps": 3.5,
+        "precipitation_probability_percent": 20
+      }
+    ]
+  }
+}
+```
+
+*The example shows one forecast item for readability. The actual response may contain multiple forecast entries.*
+
+### Error Handling
+
+The application uses a shared `APIError` mechanism for errors raised while processing weather-service responses. The HTTP status and error response body depend on the implementation in `errors.py` and `weather_service.py`.
+
+Common scenarios to handle include:
+
+- Missing or invalid location parameters
+- Unknown city or geocoding failures
+- Invalid or missing OpenWeather API credentials
+- Weather-service timeouts or rate limits
+- Unexpected responses from the weather service
+
+Check the application's error handlers for the exact error response format and status codes.
 ## Configuration
 
 Store environment-specific values in `.env`. Use `.env.example` to document the required variable names without including real credentials.
