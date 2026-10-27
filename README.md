@@ -2,6 +2,11 @@
 
 A web-based weather dashboard built with Flask, Python, HTML, CSS, and JavaScript. WeatherHub is designed to provide weather information through a clean, responsive interface.
 
+## Dashboard Preview
+
+<!-- Save your screenshot at screenshots/weatherhub-dashboard.png -->
+![WeatherHub Dashboard](screenshots/weatherhub-dashboard.png)
+
 ## Features
 
 - **Current Weather:** Retrieve current weather information for a selected city.
